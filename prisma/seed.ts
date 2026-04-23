@@ -131,7 +131,7 @@ async function main() {
       cookTime: 0,
       totalTime: 15,
       servings: 6,
-      imageUrl: "https://images.unsplash.com/photo-1576783800509-0d07f58c4b5e?w=800",
+      imageUrl: "https://images.unsplash.com/photo-1577805947697-89e18249d767?w=800",
       featured: false,
       popular: true,
       tags: ["Orta Doğu", "vegan", "vejetaryen", "mezze", "sağlıklı", "kolay"],
