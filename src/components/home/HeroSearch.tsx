@@ -46,7 +46,7 @@ export default function HeroSearch() {
           Ne pişirsem?
         </h1>
         <p className="text-[#D4C4B0] mb-8 text-base md:text-lg">
-          Malzeme veya tarif adı ile ara
+          Dünyanın dört bir yanından en iyi tarifler
         </p>
 
         <form onSubmit={handleSubmit} role="search">
@@ -75,7 +75,7 @@ export default function HeroSearch() {
         </form>
 
         <p className="mt-4 text-xs text-[#A89A8A]">
-          Örn: menemen · mercimek · domates, peynir
+          Örn: carbonara · pad thai · tiramisu · ramen
         </p>
       </div>
     </section>

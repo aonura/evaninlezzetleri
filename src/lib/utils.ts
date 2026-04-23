@@ -35,12 +35,13 @@ export function formatDate(date: Date): string {
 }
 
 export const CATEGORIES = [
-  "Kahvaltı",
-  "Ana Yemek",
-  "Tatlı",
-  "Çorba",
-  "Salata",
-  "Pratik",
+  "İtalyan",
+  "Fransız",
+  "Asya",
+  "Orta Doğu",
+  "Amerikan",
+  "Akdeniz",
+  "Tatlılar",
   "Vejetaryen",
 ] as const;
 

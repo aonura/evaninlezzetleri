@@ -5,12 +5,13 @@ import { useSearchParams } from "next/navigation";
 import { CATEGORIES } from "@/lib/utils";
 
 const categoryEmoji: Record<string, string> = {
-  Kahvaltı: "☀️",
-  "Ana Yemek": "🍽️",
-  Tatlı: "🍮",
-  Çorba: "🥣",
-  Salata: "🥗",
-  Pratik: "⚡",
+  İtalyan: "🍝",
+  Fransız: "🥐",
+  Asya: "🍜",
+  "Orta Doğu": "🧆",
+  Amerikan: "🌮",
+  Akdeniz: "🫒",
+  Tatlılar: "🍮",
   Vejetaryen: "🥦",
 };
 

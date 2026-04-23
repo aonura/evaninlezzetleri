@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s | Eva'nın Lezzetleri",
   },
   description:
-    "Geleneksel Türk yemek tarifleri — kolay, lezzetli ve ev yapımı.",
+    "Dünya mutfaklarından seçme tarifler — İtalyan, Fransız, Asya, Akdeniz ve daha fazlası.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
