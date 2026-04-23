@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #faf7f2;
+  --color-warm-white: #fffef9;
+  --color-terracotta: #c4603a;
+  --color-terracotta-light: #e8866a;
+  --color-terracotta-dark: #9e4a2b;
+  --color-beige: #e8ddd0;
+  --color-olive: #6b7c4f;
+  --color-dark: #2c2218;
+  --color-muted: #7a6a5a;
+  --color-light-text: #a89a8a;
+
+  --font-serif: "Lora", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  --radius-card: 1rem;
+  --radius-btn: 0.75rem;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-dark);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+  }
+
+  /* prevent iOS input zoom */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  /* ensure all interactive elements meet 44px tap target */
+  button,
+  a[role="button"] {
+    min-height: 44px;
+  }
+}
