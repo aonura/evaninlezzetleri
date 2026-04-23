@@ -7,25 +7,19 @@ import RecipeGrid from "@/components/recipe/RecipeGrid";
 import { SkeletonGrid } from "@/components/ui/SkeletonCard";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 async function getHomeData() {
-  const [featured, popular, recent] = await Promise.all([
-    prisma.recipe.findMany({
-      where: { featured: true },
-      include: { tags: true },
-      take: 6,
-    }),
-    prisma.recipe.findMany({
-      where: { popular: true },
-      include: { tags: true },
-      take: 6,
-    }),
-    prisma.recipe.findMany({
-      include: { tags: true },
-      orderBy: { createdAt: "desc" },
-      take: 6,
-    }),
-  ]);
-  return { featured, popular, recent };
+  try {
+    const [featured, popular, recent] = await Promise.all([
+      prisma.recipe.findMany({ where: { featured: true }, include: { tags: true }, take: 6 }),
+      prisma.recipe.findMany({ where: { popular: true }, include: { tags: true }, take: 6 }),
+      prisma.recipe.findMany({ include: { tags: true }, orderBy: { createdAt: "desc" }, take: 6 }),
+    ]);
+    return { featured, popular, recent };
+  } catch {
+    return { featured: [], popular: [], recent: [] };
+  }
 }
 
 export default async function HomePage() {
@@ -72,13 +66,8 @@ export default async function HomePage() {
 function SectionHeader({ title, href }: { title: string; href: string }) {
   return (
     <div className="flex items-center justify-between mb-5">
-      <h2 className="font-serif text-xl md:text-2xl font-semibold text-[#2C2218]">
-        {title}
-      </h2>
-      <Link
-        href={href}
-        className="text-sm text-[#C4603A] hover:text-[#9E4A2B] font-medium transition-colors"
-      >
+      <h2 className="font-serif text-xl md:text-2xl font-semibold text-[#2C2218]">{title}</h2>
+      <Link href={href} className="text-sm text-[#C4603A] hover:text-[#9E4A2B] font-medium transition-colors">
         Tümünü gör →
       </Link>
     </div>

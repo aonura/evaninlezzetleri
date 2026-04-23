@@ -11,44 +11,66 @@ import { formatTime } from "@/lib/utils";
 import { Clock, Users, ChefHat, ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 async function getRecipe(slug: string) {
-  return prisma.recipe.findUnique({
-    where: { slug },
-    include: { tags: true, ingredients: true, steps: { orderBy: { order: "asc" } } },
-  });
+  try {
+    return await prisma.recipe.findUnique({
+      where: { slug },
+      include: {
+        tags: true,
+        ingredients: true,
+        steps: { orderBy: { order: "asc" } },
+      },
+    });
+  } catch {
+    return null;
+  }
 }
 
 async function getSimilarRecipes(category: string, excludeId: number) {
-  return prisma.recipe.findMany({
-    where: { category, NOT: { id: excludeId } },
-    include: { tags: true },
-    take: 3,
-  });
+  try {
+    return await prisma.recipe.findMany({
+      where: { category, NOT: { id: excludeId } },
+      include: { tags: true },
+      take: 3,
+    });
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const recipe = await getRecipe(slug);
-  if (!recipe) return {};
-
-  return {
-    title: `${recipe.title} Tarifi`,
-    description: recipe.description,
-    openGraph: {
-      title: recipe.title,
+  try {
+    const { slug } = await params;
+    const recipe = await getRecipe(slug);
+    if (!recipe) return {};
+    return {
+      title: `${recipe.title} Tarifi`,
       description: recipe.description,
-      images: [recipe.imageUrl],
-    },
-  };
+      openGraph: {
+        title: recipe.title,
+        description: recipe.description,
+        images: [recipe.imageUrl],
+      },
+    };
+  } catch {
+    return {};
+  }
 }
 
+// Build sırasında DB yoksa boş döner — sayfalar runtime'da SSR ile üretilir
 export async function generateStaticParams() {
-  const recipes = await prisma.recipe.findMany({ select: { slug: true } });
-  return recipes.map((r) => ({ slug: r.slug }));
+  try {
+    const recipes = await prisma.recipe.findMany({ select: { slug: true } });
+    return recipes.map((r) => ({ slug: r.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export default async function RecipeDetailPage({ params }: Props) {
@@ -58,7 +80,6 @@ export default async function RecipeDetailPage({ params }: Props) {
 
   const similar = await getSimilarRecipes(recipe.category, recipe.id);
 
-  // JSON-LD Recipe schema
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Recipe",
@@ -87,7 +108,6 @@ export default async function RecipeDetailPage({ params }: Props) {
       />
 
       <article>
-        {/* Hero image */}
         <div className="relative h-64 md:h-96 bg-[#E8DDD0] overflow-hidden">
           <Image
             src={recipe.imageUrl}
@@ -99,7 +119,6 @@ export default async function RecipeDetailPage({ params }: Props) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
-          {/* Back button */}
           <Link
             href="/tarifler"
             className="absolute top-4 left-4 flex items-center gap-1.5 px-3 h-9 rounded-xl bg-white/20 backdrop-blur-sm text-white text-sm font-medium hover:bg-white/30 transition-all"
@@ -108,12 +127,10 @@ export default async function RecipeDetailPage({ params }: Props) {
             Geri
           </Link>
 
-          {/* Favorite button */}
           <div className="absolute top-4 right-4">
             <FavoriteButton recipeId={recipe.id} recipeSlug={recipe.slug} />
           </div>
 
-          {/* Title overlay */}
           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
             <Badge variant="category" className="mb-2">
               {recipe.category}
@@ -125,17 +142,12 @@ export default async function RecipeDetailPage({ params }: Props) {
         </div>
 
         <div className="max-w-4xl mx-auto px-4 py-6 md:py-8">
-          {/* Meta info */}
           <div className="flex flex-wrap gap-3 mb-6">
             <div className="flex items-center gap-2 bg-[#FFFEF9] border border-[#E8DDD0] rounded-xl px-4 py-2">
               <Clock size={16} className="text-[#C4603A]" />
               <div>
-                <p className="text-[10px] text-[#A89A8A] uppercase tracking-wide">
-                  Toplam Süre
-                </p>
-                <p className="text-sm font-semibold text-[#2C2218]">
-                  {formatTime(recipe.totalTime)}
-                </p>
+                <p className="text-[10px] text-[#A89A8A] uppercase tracking-wide">Toplam Süre</p>
+                <p className="text-sm font-semibold text-[#2C2218]">{formatTime(recipe.totalTime)}</p>
               </div>
             </div>
 
@@ -143,12 +155,8 @@ export default async function RecipeDetailPage({ params }: Props) {
               <div className="flex items-center gap-2 bg-[#FFFEF9] border border-[#E8DDD0] rounded-xl px-4 py-2">
                 <Clock size={16} className="text-[#A89A8A]" />
                 <div>
-                  <p className="text-[10px] text-[#A89A8A] uppercase tracking-wide">
-                    Hazırlık
-                  </p>
-                  <p className="text-sm font-semibold text-[#2C2218]">
-                    {formatTime(recipe.prepTime)}
-                  </p>
+                  <p className="text-[10px] text-[#A89A8A] uppercase tracking-wide">Hazırlık</p>
+                  <p className="text-sm font-semibold text-[#2C2218]">{formatTime(recipe.prepTime)}</p>
                 </div>
               </div>
             )}
@@ -157,12 +165,8 @@ export default async function RecipeDetailPage({ params }: Props) {
               <div className="flex items-center gap-2 bg-[#FFFEF9] border border-[#E8DDD0] rounded-xl px-4 py-2">
                 <ChefHat size={16} className="text-[#A89A8A]" />
                 <div>
-                  <p className="text-[10px] text-[#A89A8A] uppercase tracking-wide">
-                    Pişirme
-                  </p>
-                  <p className="text-sm font-semibold text-[#2C2218]">
-                    {formatTime(recipe.cookTime)}
-                  </p>
+                  <p className="text-[10px] text-[#A89A8A] uppercase tracking-wide">Pişirme</p>
+                  <p className="text-sm font-semibold text-[#2C2218]">{formatTime(recipe.cookTime)}</p>
                 </div>
               </div>
             )}
@@ -170,12 +174,8 @@ export default async function RecipeDetailPage({ params }: Props) {
             <div className="flex items-center gap-2 bg-[#FFFEF9] border border-[#E8DDD0] rounded-xl px-4 py-2">
               <Users size={16} className="text-[#A89A8A]" />
               <div>
-                <p className="text-[10px] text-[#A89A8A] uppercase tracking-wide">
-                  Kişi Sayısı
-                </p>
-                <p className="text-sm font-semibold text-[#2C2218]">
-                  {recipe.servings} kişi
-                </p>
+                <p className="text-[10px] text-[#A89A8A] uppercase tracking-wide">Kişi Sayısı</p>
+                <p className="text-sm font-semibold text-[#2C2218]">{recipe.servings} kişi</p>
               </div>
             </div>
 
@@ -186,10 +186,7 @@ export default async function RecipeDetailPage({ params }: Props) {
             </div>
           </div>
 
-          {/* Description */}
-          <p className="text-[#7A6A5A] text-base leading-relaxed mb-4">
-            {recipe.description}
-          </p>
+          <p className="text-[#7A6A5A] text-base leading-relaxed mb-4">{recipe.description}</p>
 
           {recipe.intro && (
             <p className="text-[#7A6A5A] text-sm leading-relaxed mb-6 italic border-l-2 border-[#C4603A]/30 pl-4">
@@ -197,14 +194,10 @@ export default async function RecipeDetailPage({ params }: Props) {
             </p>
           )}
 
-          {/* Tags */}
           {recipe.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-8">
               {recipe.tags.map((tag) => (
-                <Link
-                  key={tag.id}
-                  href={`/ara?q=${encodeURIComponent(tag.name)}`}
-                >
+                <Link key={tag.id} href={`/ara?q=${encodeURIComponent(tag.name)}`}>
                   <Badge variant="tag">#{tag.name}</Badge>
                 </Link>
               ))}
@@ -212,29 +205,19 @@ export default async function RecipeDetailPage({ params }: Props) {
           )}
 
           <div className="grid md:grid-cols-2 gap-8 md:gap-12">
-            {/* Ingredients */}
             <section>
-              <h2 className="font-serif text-xl font-semibold text-[#2C2218] mb-4">
-                Malzemeler
-              </h2>
+              <h2 className="font-serif text-xl font-semibold text-[#2C2218] mb-4">Malzemeler</h2>
               <IngredientList ingredients={recipe.ingredients} />
             </section>
-
-            {/* Steps */}
             <section>
-              <h2 className="font-serif text-xl font-semibold text-[#2C2218] mb-4">
-                Hazırlanışı
-              </h2>
+              <h2 className="font-serif text-xl font-semibold text-[#2C2218] mb-4">Hazırlanışı</h2>
               <StepList steps={recipe.steps} />
             </section>
           </div>
 
-          {/* Similar recipes */}
           {similar.length > 0 && (
             <section className="mt-12 pt-8 border-t border-[#E8DDD0]">
-              <h2 className="font-serif text-xl font-semibold text-[#2C2218] mb-5">
-                Benzer Tarifler
-              </h2>
+              <h2 className="font-serif text-xl font-semibold text-[#2C2218] mb-5">Benzer Tarifler</h2>
               <RecipeGrid recipes={similar} />
             </section>
           )}

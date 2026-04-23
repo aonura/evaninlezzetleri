@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Prisma'yı Next.js bundle'ına dahil etme, native Node.js modülü olarak kullan
+  serverExternalPackages: ["@prisma/client", "prisma"],
 };
 
 export default nextConfig;

@@ -5,41 +5,36 @@ import { SkeletonGrid } from "@/components/ui/SkeletonCard";
 import CategoryChips from "@/components/home/CategoryChips";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Tüm Tarifler",
   description: "Türk mutfağının en güzel tariflerini keşfedin.",
 };
 
 interface Props {
-  searchParams: Promise<{
-    kategori?: string;
-    zorluk?: string;
-    sure?: string;
-  }>;
+  searchParams: Promise<{ kategori?: string; zorluk?: string }>;
 }
 
-async function getRecipes(filters: {
-  kategori?: string;
-  zorluk?: string;
-}) {
-  const where: Record<string, unknown> = {};
-  if (filters.kategori) where.category = filters.kategori;
-  if (filters.zorluk) where.difficulty = filters.zorluk;
-
-  return prisma.recipe.findMany({
-    where,
-    include: { tags: true },
-    orderBy: { createdAt: "desc" },
-  });
+async function getRecipes(filters: { kategori?: string; zorluk?: string }) {
+  try {
+    const where: Record<string, unknown> = {};
+    if (filters.kategori) where.category = filters.kategori;
+    if (filters.zorluk) where.difficulty = filters.zorluk;
+    return await prisma.recipe.findMany({
+      where,
+      include: { tags: true },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch {
+    return [];
+  }
 }
 
 export default async function TariflerPage({ searchParams }: Props) {
   const params = await searchParams;
   const recipes = await getRecipes(params);
-
-  const filterLabel = params.kategori
-    ? `${params.kategori} Tarifleri`
-    : "Tüm Tarifler";
+  const filterLabel = params.kategori ? `${params.kategori} Tarifleri` : "Tüm Tarifler";
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 md:py-10">
@@ -54,11 +49,8 @@ export default async function TariflerPage({ searchParams }: Props) {
 
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-[#7A6A5A]">
-          <span className="font-semibold text-[#2C2218]">{recipes.length}</span>{" "}
-          tarif bulundu
+          <span className="font-semibold text-[#2C2218]">{recipes.length}</span> tarif bulundu
         </p>
-
-        {/* Difficulty filter */}
         <div className="flex gap-2">
           {["Kolay", "Orta", "Zor"].map((d) => (
             <a

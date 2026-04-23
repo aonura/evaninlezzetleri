@@ -6,6 +6,8 @@ import SearchForm from "./SearchForm";
 import type { Metadata } from "next";
 import type { RecipeCard } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Tarif Ara",
 };
