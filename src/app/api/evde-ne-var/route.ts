@@ -44,29 +44,15 @@ export async function POST(request: Request) {
 
     /* ── 4. Build prompt ── */
     const userMessage = [
-      `Evdeki malzemeler: ${ingredients}`,
-      `Kullanmak istemedikleri: ${avoidIngredients || "yok"}`,
-      `Süre: ${cookingTime || "belirtilmedi"}`,
-      `Pişirme ekipmanı: ${equipment || "belirtilmedi"}`,
-      `Kişi sayısı: ${servings || "belirtilmedi"}`,
+      `Malzemeler: ${ingredients}`,
+      avoidIngredients ? `Kullanma: ${avoidIngredients}` : "",
+      cookingTime      ? `Süre: ${cookingTime}`          : "",
+      equipment        ? `Ekipman: ${equipment}`         : "",
+      servings         ? `Kişi: ${servings}`             : "",
       "",
-      "Bu bilgilere göre 3 pratik ev yemeği tarifi öner.",
-      "Her tarif için sadece evdeki malzemeleri kullan, ekstra alışveriş gerektirme.",
-      "Yanıtı tam olarak şu JSON formatında döndür:",
-      `{
-  "recipes": [
-    {
-      "title": "Tarif adı",
-      "description": "1-2 cümle açıklama",
-      "time": "Yaklaşık süre",
-      "difficulty": "Kolay",
-      "ingredients": ["malzeme 1", "malzeme 2"],
-      "steps": ["Adım 1: ...", "Adım 2: ..."],
-      "evaNote": "Kısa ve pratik bir ipucu"
-    }
-  ]
-}`,
-    ].join("\n");
+      'Yukarıdaki malzemeleri kullanarak 3 pratik Türk ev yemeği tarifi öner. Ekstra alışveriş gerektirme. Her tarif kısa tutulsun (adımlar 3-4 cümle). JSON formatı:',
+      '{"recipes":[{"title":"","description":"","time":"","difficulty":"Kolay","ingredients":[],"steps":[],"evaNote":""}]}',
+    ].filter(Boolean).join("\n");
 
     /* ── 5. Call DeepSeek ── */
     let dsResponse: Response;
@@ -83,16 +69,15 @@ export async function POST(request: Request) {
             {
               role: "system",
               content:
-                "Sen Eva'nın Lezzetleri sitesindeki sıcak, pratik ve ev tipi Türk mutfağı odaklı tarif asistanısın. " +
-                "Cevapların Türkçe, sade, uygulanabilir ve ev mutfağına uygun olmalı. " +
-                "Kullanıcının verdiği malzemelere mümkün olduğunca sadık kal. " +
-                "Uydurma pahalı veya egzotik malzemeler önerme. " +
-                "Gereksiz uzun konuşma. Sadece geçerli JSON döndür.",
+                "Türk ev mutfağı tarif asistanısın. " +
+                "Kısa, sade, uygulanabilir Türkçe tarifler ver. " +
+                "Sadece verilen malzemeleri kullan. " +
+                "Sadece geçerli JSON döndür.",
             },
             { role: "user", content: userMessage },
           ],
           temperature: 0.7,
-          max_tokens: 1400,
+          max_tokens: 900,
           response_format: { type: "json_object" },
         }),
       });
