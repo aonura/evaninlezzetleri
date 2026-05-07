@@ -233,6 +233,124 @@
     opacity: 0.35;
   }
 
+  /* ── Inner page shared utilities ── */
+
+  /* Notebook paper form container */
+  .eva-notebook {
+    background-color: #faf7f0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(140,100,40,0.07) 27px, rgba(140,100,40,0.07) 28px);
+    border: 2px solid var(--color-parchment);
+    box-shadow: 3px 4px 0 rgba(180,140,60,0.2);
+    position: relative;
+  }
+  .eva-notebook::before {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 56px;
+    width: 1.5px;
+    background: rgba(192, 80, 70, 0.25);
+    pointer-events: none;
+  }
+
+  /* Aged panel (section block) */
+  .eva-panel {
+    background: #f2e8d0;
+    border: 2px solid var(--color-parchment);
+    outline: 1px solid rgba(180,140,60,0.2);
+    outline-offset: -5px;
+    box-shadow: 2px 3px 0 rgba(180,140,60,0.18);
+    background-image: repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(140,100,40,0.05) 27px,rgba(140,100,40,0.05) 28px);
+  }
+
+  /* Vintage form inputs / selects / textareas */
+  .eva-field {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    background: #fffef9;
+    border: 1.5px solid var(--color-parchment);
+    border-bottom: 2px solid var(--color-muted);
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    color: var(--color-ink);
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 0;
+    -webkit-appearance: none;
+  }
+  .eva-field:focus {
+    border-color: var(--color-tomato);
+    box-shadow: 0 1px 0 var(--color-tomato);
+  }
+
+  /* Vintage submit button */
+  .eva-btn {
+    display: inline-block;
+    padding: 0.7rem 1.75rem;
+    background: var(--color-tomato);
+    color: #fff;
+    border: 2px solid #8b2a1f;
+    font-family: var(--font-serif);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .eva-btn:hover  { opacity: 0.88; }
+  .eva-btn:active { transform: scale(0.97); }
+
+  .eva-btn-olive {
+    background: var(--color-olive);
+    border-color: #3c5028;
+  }
+  .eva-btn-ink {
+    background: var(--color-ink);
+    border-color: var(--color-ink-light);
+  }
+
+  /* Vintage small label / badge */
+  .eva-badge {
+    display: inline-block;
+    font-family: var(--font-serif);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 2px 8px;
+    border: 1.5px solid currentColor;
+  }
+
+  /* Suggestion / result card */
+  .eva-suggestion {
+    position: relative;
+    padding: 1rem 1.1rem;
+    background: #faf7f0;
+    border: 1.5px solid var(--color-parchment);
+    border-left: 4px solid var(--color-tomato);
+    box-shadow: 2px 3px 0 rgba(180,140,60,0.18);
+    background-image: repeating-linear-gradient(0deg,transparent,transparent 24px,rgba(140,100,40,0.04) 24px,rgba(140,100,40,0.04) 25px);
+  }
+
+  /* Section heading */
+  .eva-section-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    color: var(--color-ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eva-section-title::after {
+    content: "";
+    flex: 1;
+    height: 1.5px;
+    background: var(--color-parchment);
+  }
+
   /* ── Homepage sliced-image layout ── */
   .evaHome {
     min-height: 100svh;
