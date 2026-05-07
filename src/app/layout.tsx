@@ -36,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr" className="h-full">
-      <body className="min-h-full flex flex-col pb-16 md:pb-0" style={{ backgroundColor: "var(--color-cream)" }}>
+      <body className="min-h-full flex flex-col" style={{ backgroundColor: "var(--color-cream)" }}>
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

@@ -6,7 +6,9 @@ import { usePathname } from "next/navigation";
 export default function Header() {
   const pathname = usePathname();
 
-  if (pathname?.startsWith("/admin")) return null;
+  // Hide completely on the homepage (the reference image IS the navigation)
+  // and on all admin routes
+  if (pathname === "/" || pathname?.startsWith("/admin")) return null;
 
   return (
     <header
@@ -25,7 +27,7 @@ export default function Header() {
           className="flex-none flex items-baseline leading-none select-none gap-1.5 group"
         >
           <span
-            className="font-bold italic transition-colors duration-200 group-hover:opacity-80"
+            className="font-bold italic transition-opacity duration-200 group-hover:opacity-75"
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(1.1rem, 2.8vw, 1.4rem)",
@@ -36,7 +38,7 @@ export default function Header() {
             Eva&apos;nın
           </span>
           <span
-            className="font-bold transition-colors duration-200 group-hover:opacity-80"
+            className="font-bold transition-opacity duration-200 group-hover:opacity-75"
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(1rem, 2.6vw, 1.3rem)",
@@ -54,16 +56,17 @@ export default function Header() {
           <NavLink href="/evde-ne-var">Evde Ne Var?</NavLink>
           <NavLink href="/hizli-yemekler">Tarifler</NavLink>
           <NavLink href="/haftalik-menu">Haftalık Menü</NavLink>
+          <NavLink href="/">← Ana Sayfa</NavLink>
         </nav>
 
-        {/* Home link visible only on non-home pages (mobile) */}
+        {/* Mobile: back-home link */}
         <Link
           href="/"
           aria-label="Ana sayfa"
-          className="md:hidden flex items-center justify-center w-9 h-9 rounded transition-opacity duration-200 hover:opacity-70"
-          style={{ color: "var(--color-aged)" }}
+          className="md:hidden flex items-center gap-1.5 text-sm transition-opacity hover:opacity-70"
+          style={{ color: "var(--color-aged)", fontFamily: "var(--font-serif)" }}
         >
-          <HomeIcon />
+          ← Ana Sayfa
         </Link>
       </div>
     </header>
@@ -74,7 +77,7 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   return (
     <Link
       href={href}
-      className="relative text-xs font-semibold uppercase tracking-widest transition-colors duration-200 hover:opacity-70"
+      className="text-xs font-semibold uppercase tracking-widest transition-opacity duration-200 hover:opacity-70"
       style={{
         fontFamily: "var(--font-serif)",
         color: "var(--color-aged)",
@@ -83,15 +86,5 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
     >
       {children}
     </Link>
-  );
-}
-
-function HomeIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
-      <path d="M3 9.5L10 3l7 6.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M5 8.5V17h10V8.5" strokeLinecap="round" strokeLinejoin="round" />
-      <rect x="7.5" y="12" width="5" height="5" />
-    </svg>
   );
 }
