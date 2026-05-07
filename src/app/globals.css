@@ -232,4 +232,70 @@
     background: currentColor;
     opacity: 0.35;
   }
+
+  /* ── Homepage sliced-image layout ── */
+  .evaHome {
+    min-height: 100svh;
+    background: #2b160d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+  }
+
+  .evaHero {
+    width: min(100%, 1086px);
+    line-height: 0;
+  }
+
+  .evaHero img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .evaTileGrid {
+    width: min(100%, 1086px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 6px;
+    box-sizing: border-box;
+    background: #2b160d;
+  }
+
+  .evaTileGrid a {
+    display: block;
+    line-height: 0;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .evaTileGrid img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 160ms ease, filter 160ms ease;
+  }
+
+  .evaTileGrid a:hover img {
+    filter: brightness(1.05);
+    transform: scale(1.015);
+  }
+
+  @media (max-width: 700px) {
+    .evaTileGrid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 5px;
+      padding: 5px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .evaTileGrid {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
 }

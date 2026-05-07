@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 export default function Header() {
   const pathname = usePathname();
 
-  // Hide on admin routes only; homepage now has a real coded layout
-  if (pathname?.startsWith("/admin")) return null;
+  // Homepage uses sliced image tiles as its own navigation — no top bar needed there
+  if (pathname === "/" || pathname?.startsWith("/admin")) return null;
 
   return (
     <header

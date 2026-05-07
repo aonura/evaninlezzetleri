@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 export default function Footer() {
   const pathname = usePathname();
 
-  // Hide only on admin routes
-  if (pathname?.startsWith("/admin")) return null;
+  // Homepage is a self-contained image layout; footer hidden there
+  if (pathname === "/" || pathname?.startsWith("/admin")) return null;
 
   return (
     <footer

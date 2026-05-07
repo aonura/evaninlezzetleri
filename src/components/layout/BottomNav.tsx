@@ -54,8 +54,8 @@ const navItems = [
 export default function BottomNav() {
   const pathname = usePathname();
 
-  // Hide only on admin routes
-  if (pathname?.startsWith("/admin")) return null;
+  // Homepage uses tile images as navigation; bottom nav not needed there
+  if (pathname === "/" || pathname?.startsWith("/admin")) return null;
 
   return (
     <>
