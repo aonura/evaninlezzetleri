@@ -54,8 +54,8 @@ const navItems = [
 export default function BottomNav() {
   const pathname = usePathname();
 
-  // Hide on homepage (image is the navigation) and admin
-  if (pathname === "/" || pathname?.startsWith("/admin")) return null;
+  // Hide only on admin routes
+  if (pathname?.startsWith("/admin")) return null;
 
   return (
     <>

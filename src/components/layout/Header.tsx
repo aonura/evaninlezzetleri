@@ -6,9 +6,8 @@ import { usePathname } from "next/navigation";
 export default function Header() {
   const pathname = usePathname();
 
-  // Hide completely on the homepage (the reference image IS the navigation)
-  // and on all admin routes
-  if (pathname === "/" || pathname?.startsWith("/admin")) return null;
+  // Hide on admin routes only; homepage now has a real coded layout
+  if (pathname?.startsWith("/admin")) return null;
 
   return (
     <header
