@@ -1,23 +1,67 @@
-@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #faf7f2;
+  /* Base palette */
+  --color-cream: #faf7f0;
+  --color-aged: #f2e8d0;
+  --color-parchment: #e8d9b8;
   --color-warm-white: #fffef9;
+
+  /* Ink & neutrals */
+  --color-ink: #2c1a0e;
+  --color-ink-light: #4a3728;
+  --color-muted: #7a6a5a;
+  --color-light-text: #a89a8a;
+
+  /* Main palette */
+  --color-tomato: #c0392b;
+  --color-tomato-light: #e05a48;
+  --color-tomato-dark: #8b2a1f;
+  --color-olive: #5c6e3a;
+  --color-olive-light: #7a8f50;
+  --color-mustard: #c49a1e;
+  --color-mustard-light: #e0b82a;
+  --color-rust: #c4603a;
+  --color-rust-light: #e8866a;
+
+  /* Keep legacy names for compat */
   --color-terracotta: #c4603a;
   --color-terracotta-light: #e8866a;
   --color-terracotta-dark: #9e4a2b;
   --color-beige: #e8ddd0;
-  --color-olive: #6b7c4f;
-  --color-dark: #2c2218;
-  --color-muted: #7a6a5a;
-  --color-light-text: #a89a8a;
+  --color-dark: #2c1a0e;
 
-  --font-serif: "Lora", Georgia, serif;
-  --font-sans: "Inter", system-ui, sans-serif;
+  /* Fonts */
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-serif: "Lora", "Crimson Text", Georgia, serif;
+  --font-sans: "Crimson Text", Georgia, serif;
 
-  --radius-card: 1rem;
-  --radius-btn: 0.75rem;
+  /* Radii */
+  --radius-card: 0.5rem;
+  --radius-btn: 0.375rem;
+}
+
+/* ── Tile colors as CSS vars (used inline) ── */
+:root {
+  --tile-1: #f0e0a8;
+  --tile-1-border: #c4a050;
+  --tile-2: #d4e8c0;
+  --tile-2-border: #6a9850;
+  --tile-3: #f0d8a0;
+  --tile-3-border: #b89040;
+  --tile-4: #f5d070;
+  --tile-4-border: #c49020;
+  --tile-5: #e8c8a8;
+  --tile-5-border: #b07848;
+  --tile-6: #f0d8c8;
+  --tile-6-border: #c09070;
+  --tile-7: #c8dca8;
+  --tile-7-border: #6a9850;
+  --tile-8: #d4dcc0;
+  --tile-8-border: #8a9870;
+  --tile-9: #e8e0b0;
+  --tile-9-border: #b0a060;
 }
 
 @layer base {
@@ -34,29 +78,158 @@
 
   body {
     background-color: var(--color-cream);
-    color: var(--color-dark);
+    color: var(--color-ink);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    font-family: var(--font-serif);
   }
 
   h1,
   h2,
   h3,
-  h4 {
-    font-family: var(--font-serif);
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
   }
 
-  /* prevent iOS input zoom */
   input,
   select,
   textarea {
     font-size: 16px;
+    font-family: var(--font-serif);
   }
 
-  /* ensure all interactive elements meet 44px tap target */
   button,
   a[role="button"] {
     min-height: 44px;
+  }
+}
+
+@layer utilities {
+  /* Paper texture simulation */
+  .paper-texture {
+    background-color: var(--color-cream);
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 27px,
+        rgba(180, 140, 60, 0.06) 27px,
+        rgba(180, 140, 60, 0.06) 28px
+      );
+  }
+
+  .aged-paper {
+    background-color: var(--color-aged);
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 27px,
+        rgba(140, 100, 40, 0.07) 27px,
+        rgba(140, 100, 40, 0.07) 28px
+      );
+  }
+
+  /* Vintage double-border utility */
+  .vintage-frame {
+    border: 2px solid currentColor;
+    position: relative;
+  }
+  .vintage-frame::after {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border: 1px dashed currentColor;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* Checkered pattern for decorative strips */
+  .checkered {
+    background-image: repeating-conic-gradient(
+      #c0392b 0% 25%,
+      #e8d9b8 0% 50%
+    );
+    background-size: 16px 16px;
+  }
+
+  /* Stamp style */
+  .stamp {
+    border: 3px solid currentColor;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: var(--font-serif);
+    font-weight: 700;
+    transform: rotate(-12deg);
+  }
+
+  /* Ribbon banner */
+  .ribbon {
+    position: relative;
+    display: inline-block;
+    background: var(--color-tomato);
+    color: #fff;
+    padding: 0.35rem 2.5rem;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+  .ribbon::before,
+  .ribbon::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    border: solid transparent;
+  }
+  .ribbon::before {
+    right: -14px;
+    border-width: 0 0 100% 14px;
+    border-left-color: var(--color-tomato);
+  }
+  .ribbon::after {
+    left: -14px;
+    border-width: 100% 0 0 14px;
+    border-left-color: var(--color-tomato);
+  }
+
+  /* Vintage form field wrapper */
+  .vintage-field {
+    border: 1.5px solid var(--color-parchment);
+    border-bottom: 2px solid var(--color-muted);
+    background: var(--color-warm-white);
+    padding: 0.5rem 0.75rem;
+    font-family: var(--font-serif);
+    color: var(--color-ink);
+    transition: border-color 0.2s;
+  }
+  .vintage-field:focus {
+    outline: none;
+    border-color: var(--color-tomato);
+  }
+
+  /* Section ornament */
+  .section-ornament {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-muted);
+  }
+  .section-ornament::before,
+  .section-ornament::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.35;
   }
 }
