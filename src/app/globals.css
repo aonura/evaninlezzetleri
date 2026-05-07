@@ -266,17 +266,23 @@
     background: #2b160d;
   }
 
+  /* Every tile link is a fixed-ratio box so all cells are visually identical */
   .evaTileGrid a {
     display: block;
-    line-height: 0;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
+    line-height: 0;
     background: transparent;
   }
 
+  /* All tile PNGs are 362×362 — fill stretches exactly to the box with zero
+     distortion because source and destination are the same aspect ratio */
   .evaTileGrid img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: fill;
     transition: transform 160ms ease, filter 160ms ease;
   }
 
@@ -285,15 +291,17 @@
     transform: scale(1.015);
   }
 
+  /* Tablet: 2 columns */
   @media (max-width: 900px) {
     .evaTileGrid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 
+  /* Mobile: 2 columns — tiles are uniform squares so pairs always balance */
   @media (max-width: 640px) {
     .evaTileGrid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 5px;
       padding: 5px;
     }

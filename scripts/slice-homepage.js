@@ -84,13 +84,27 @@ async function main() {
     { name: "tile-9", left: COL3_X, top: ROW3_TOP, width: COL3_W,    height: ROW3_H  },
   ];
 
+  // All 9 tiles are normalised to this exact size so every grid cell is
+  // identical. The hero is exported at its natural crop size (unchanged).
+  const TILE_SIZE = 362;
+
   for (const s of slices) {
     const outPath = path.join(OUT_DIR, `${s.name}.png`);
-    await sharp(INPUT)
-      .extract({ left: s.left, top: s.top, width: s.width, height: s.height })
-      .png({ compressionLevel: 8 })
-      .toFile(outPath);
-    console.log(`✓  ${s.name.padEnd(8)}  (${s.left}, ${s.top})  →  ${s.width} × ${s.height}`);
+    const pipeline = sharp(INPUT)
+      .extract({ left: s.left, top: s.top, width: s.width, height: s.height });
+
+    if (s.name !== "hero") {
+      // Resize every tile to an identical square so the grid is uniform.
+      // fit: "fill" matches what the CSS does (object-fit: fill on equal-size
+      // images causes zero visible distortion).
+      pipeline.resize(TILE_SIZE, TILE_SIZE, { fit: "fill" });
+    }
+
+    await pipeline.png({ compressionLevel: 8 }).toFile(outPath);
+
+    const finalW = s.name === "hero" ? s.width  : TILE_SIZE;
+    const finalH = s.name === "hero" ? s.height : TILE_SIZE;
+    console.log(`✓  ${s.name.padEnd(8)}  (${s.left}, ${s.top})  crop ${s.width}×${s.height}  →  output ${finalW}×${finalH}`);
   }
 
   // Verify totals add up to source dimensions
